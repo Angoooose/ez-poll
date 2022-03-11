@@ -1,14 +1,47 @@
-import type { NextPage } from 'next';
+import { withIronSessionSsr } from 'iron-session/next';
+
 import Auth from '../components/Auth/Auth';
 import Header from '../components/Header/Header';
+import sessionCookie from '../utils/sessionCookie';
 
-const Home: NextPage = () => {
+interface HomeProps {
+  isAuthed: boolean,
+  user: {
+    id: string,
+  },
+}
+
+export default function Home({ isAuthed, user }: HomeProps) {
   return (
     <div className="bg-neutral-800 text-white h-screen w-full">
-      <Header/>
-      <Auth/>
+      <Header isAuthed={isAuthed}/>
+      {
+        !isAuthed ? (
+          <Auth/>
+        ) : (
+          <div></div>
+        )
+      }
     </div>
   );
 }
 
-export default Home;
+export const getServerSideProps = withIronSessionSsr(
+  async function getServerSideProps({ req }) {
+    const user = req.session.user;
+
+    if (!user) {
+      return {
+        props: {
+          isAuthed: false,
+        }
+      };
+    }
+
+    return {
+      props: {
+        isAuthed: true,
+        user: req.session.user,
+      },
+    };
+  }, sessionCookie);

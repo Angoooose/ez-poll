@@ -1,13 +1,26 @@
 import github from '../../public/GitHub-Mark-Light-120px-plus.png';
 import Image from 'next/image';
+import Button from '../common/Button';
 
-export default function Header() {
+interface HeaderProps {
+    isAuthed: boolean,
+}
+
+export default function Header({ isAuthed }: HeaderProps) {
+    const logout = async () => {
+        await fetch('/api/auth/logout');
+        window.location.reload();
+    };
+
     return (
         <header className="bg-neutral-900 w-full mb-10 p-3 text-2xl font-bold shadow-md flex justify-between items-center">
             ez-poll
-            <a className="h-8" href="https://github.com/Angoooose" target="_blank">
-                <Image src={github} width={32} height={32}/>
-            </a>
+            <div className="flex flex-row items-center">
+                {isAuthed ? <Button color="danger" sideMargin={true} onClick={logout}>Logout</Button> : null}
+                <a className="h-8" href="https://github.com/Angoooose" target="_blank">
+                    <Image src={github} width={32} height={32}/>
+                </a>
+            </div>
         </header>
     );
 }

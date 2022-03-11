@@ -16,7 +16,7 @@ export default function CreateAccount({ setAuthType }: CreateAccountProps) {
         e.preventDefault();
 
         if (emailRef.current?.value && passwordRef.current?.value) {
-            fetch('/api/auth/add', {
+            fetch('/api/auth/create', {
                 method: 'POST',
                 body: JSON.stringify({
                     email: emailRef.current.value,
@@ -26,7 +26,7 @@ export default function CreateAccount({ setAuthType }: CreateAccountProps) {
                 console.log(res.status);
             });
         }
-    }
+    };
 
     return (
         <Card>

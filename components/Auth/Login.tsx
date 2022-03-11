@@ -16,7 +16,7 @@ export default function Login({ setAuthType }: LoginProps) {
         e.preventDefault();
 
         if (emailRef.current?.value && passwordRef.current?.value) {
-            fetch('/api/auth/get', {
+            fetch('/api/auth/login', {
                 method: 'PUT',
                 body: JSON.stringify({
                     email: emailRef.current.value,
@@ -24,9 +24,10 @@ export default function Login({ setAuthType }: LoginProps) {
                 }),
             }).then(res => {
                 console.log(res.status);
+                if (res.status === 200) window.location.reload();
             });
         }
-    }
+    };
 
     return (
         <Card>
