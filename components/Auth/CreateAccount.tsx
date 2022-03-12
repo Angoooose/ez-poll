@@ -16,14 +16,24 @@ export default function CreateAccount({ setAuthType }: CreateAccountProps) {
         e.preventDefault();
 
         if (emailRef.current?.value && passwordRef.current?.value) {
+            const reqBody = JSON.stringify({
+                email: emailRef.current.value,
+                password: passwordRef.current.value,
+            });
+
             fetch('/api/auth/create', {
                 method: 'POST',
-                body: JSON.stringify({
-                    email: emailRef.current.value,
-                    password: passwordRef.current.value,
-                }),
+                body: reqBody,
             }).then(res => {
                 console.log(res.status);
+                if (res.status === 204) {
+                    fetch('/api/auth/login', {
+                        method: 'PUT',
+                        body: reqBody,
+                    }).then((res) => {
+                        if (res.status === 200) window.location.reload();
+                    });
+                }
             });
         }
     };

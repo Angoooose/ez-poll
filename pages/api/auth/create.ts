@@ -11,10 +11,7 @@ export default async function handler({ body }: NextApiRequest, res: NextApiResp
         const uuid = await generateUuid('users');
         console.log(uuid);
         pool.query('INSERT INTO users (id, email, password) VALUES ($1, $2, $3)', [uuid, email, password]).then(() => {
-            res.writeHead(302, {
-                'Location': '/api/auth/login',
-            });
-            res.end();
+            res.status(204).send({ message: 'Created account', code: 1 });
         }).catch((err) => {
             console.error(err);
             res.status(500).send({ message: 'Internal Server Error', code: 0 });
