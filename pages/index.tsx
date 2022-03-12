@@ -2,16 +2,17 @@ import { withIronSessionSsr } from 'iron-session/next';
 
 import Auth from '../components/Auth/Auth';
 import Header from '../components/Header/Header';
+import Home from '../components/Home/Home';
 import sessionCookie from '../utils/sessionCookie';
 
-interface HomeProps {
+interface AppProps {
   isAuthed: boolean,
   user: {
     id: string,
   },
 }
 
-export default function Home({ isAuthed, user }: HomeProps) {
+export default function App({ isAuthed }: AppProps) {
   return (
     <div className="bg-neutral-800 text-white h-screen w-full">
       <Header isAuthed={isAuthed}/>
@@ -19,7 +20,7 @@ export default function Home({ isAuthed, user }: HomeProps) {
         !isAuthed ? (
           <Auth/>
         ) : (
-          <div></div>
+          <Home/>
         )
       }
     </div>
