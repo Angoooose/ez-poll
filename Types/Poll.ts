@@ -4,7 +4,7 @@ export default interface Poll {
     id: string,
     ownerId: string,
     title: string,
-    description: string,
+    description?: string,
     endsAt: number,
     choices: PollChoice[],
 }
