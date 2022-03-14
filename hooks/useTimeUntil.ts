@@ -1,13 +1,13 @@
 import { Dispatch, useEffect, useState } from 'react';
 
-export default function useTimeUntil(date: number): [string|undefined, Dispatch<number>] {
+export default function useTimeUntil(date?: number): [string|undefined, Dispatch<number>] {
     const [dateState, setDateState] = useState<number|undefined>(date);
     const [timeUntil, setTimeUntil] = useState<string>('...');
 
     useEffect(() => {
         if (!date && !dateState) return;
-        setTimeUntil(getTimeUntil(date as number));
-        setInterval(() => setTimeUntil(getTimeUntil(date as number)), 5000);
+        setTimeUntil(getTimeUntil(dateState as number));
+        setInterval(() => setTimeUntil(getTimeUntil(dateState as number)), 5000);
     }, [dateState]);
 
     return [timeUntil, setDateState];
