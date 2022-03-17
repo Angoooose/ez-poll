@@ -1,11 +1,15 @@
-import { useEffect, useState } from 'react';
-import { default as PollData } from '../../Types/Poll';
+import { useEffect, useState, useRef } from 'react';
 import { ClipboardListIcon, ClockIcon } from '@heroicons/react/outline';
+import Voted from './Voted';
 
-import optionColors from '../../utils/optionColors';
 import useTimeUntil from '../../hooks/useTimeUntil';
 import useSocket from '../../hooks/useSocket';
-import BarChart from '../common/BarChart/BarChart';
+import useLocalStorage from '../../hooks/useLocalStorage';
+
+import optionColors from '../../utils/optionColors';
+import VoteData from '../../Types/VoteData';
+import { default as PollData } from '../../Types/Poll';
+import PollChoice from '../../Types/PollChoice';
 
 interface PollProps {
     pollId: string|undefined,
@@ -23,11 +27,24 @@ export default function Poll({ pollId }: PollProps) {
     });
     
     const socket = useSocket();
+    const [isSocketListening, setIsSocketListening] = useState<boolean>(false);
+
+    const choices = useRef<PollChoice[]>([]);
+    const updateChoices = (newChoices: PollChoice[], updatePollData?: boolean) => {
+        choices.current = newChoices
+        if (updatePollData) setPollData({
+            ...pollData,
+            choices: [...newChoices],
+        });
+    };
+
+    const [voteData, setVoteData] = useLocalStorage<VoteData[]>('voteData', []);
 
     useEffect(() => {
         if (pollId) {
             fetch(`/api/poll/get/?pollId=${pollId}`).then(res => res.json()).then((res) => {
                 setPollData(res);
+                updateChoices(res.choices);
                 setTimeUntil(res.endsAt);
                 setIsChoiceOpaque(Array(res.choices.length).fill(false));
             });
@@ -35,15 +52,15 @@ export default function Poll({ pollId }: PollProps) {
     }, [pollId]);
 
     useEffect(() => {
-        if (socket && pollId) {
+        if (socket && pollId && pollData.choices.length > 0 && !isSocketListening) {
+            setIsSocketListening(true);
             socket.on(pollId, (msg: number) => {
-                if (msg + 1 > pollData.choices.length) return;
-                let newPollData: PollData = JSON.parse(JSON.stringify(pollData));
-                newPollData.choices[msg].votes++;
-                setPollData(newPollData);
+                let newChoices = [...choices.current];
+                newChoices[msg].votes++;
+                updateChoices(newChoices, true);
             });
         }
-    }, [socket, pollId]);
+    }, [socket, pollId, pollData]);
 
     const handleChoiceHover = (index: number) => {
         const newChoices = [...isChoiceOpaque];
@@ -57,7 +74,10 @@ export default function Poll({ pollId }: PollProps) {
     };
 
     const vote = (choiceIndex: number) => {
-        if (!socket) return;
+        if (!socket || !voteData) return;
+        let newVoteData = [...voteData];
+        newVoteData.push({ id: pollId as string, choiceIndex });
+        setVoteData(newVoteData);
         socket.emit('newVote', {
             pollId,
             choiceIndex,
@@ -82,16 +102,19 @@ export default function Poll({ pollId }: PollProps) {
                     </div>
                 </div>
             </div>
-            <div className="flex items-center justify-center">
-                {pollData.choices.map((c, i) => {
-                    return (
-                        <div className={`bg-gradient-to-t py-10 my-4 mx-2 first:ml-0 last:mr-0 rounded-md shadow-sm flex flex-col justify-center items-center font-medium select-none cursor-pointer w-3/6 hover:w-5/6 transition-all ${isChoiceOpaque[i] ? 'opacity-50' : ''} ${optionColors[i]}`} onMouseOver={() => handleChoiceHover(i)} onMouseLeave={() => setIsChoiceOpaque(Array(pollData.choices.length).fill(false))} onClick={() => vote(i)}>
-                            <div className="px-5 text-center">{c.name}</div>
-                        </div>
-                    );
-                })}
-            </div>
-            <BarChart values={pollData.choices}></BarChart>
+            {voteData && voteData.some(p => p.id === pollId) ? (
+                <Voted choices={pollData.choices} userChoice={voteData.find(p => p.id === pollId)?.choiceIndex as number}/>
+            ) : (
+                <div className="flex items-center justify-center">
+                    {pollData.choices.map((c, i) => {
+                        return (
+                            <div className={`bg-gradient-to-t py-10 my-4 mx-2 first:ml-0 last:mr-0 rounded-md shadow-sm flex flex-col justify-center items-center font-medium select-none cursor-pointer w-3/6 hover:w-5/6 transition-all ${isChoiceOpaque[i] ? 'opacity-50' : ''} ${optionColors[i]}`} onMouseOver={() => handleChoiceHover(i)} onMouseLeave={() => setIsChoiceOpaque(Array(pollData.choices.length).fill(false))} onClick={() => vote(i)}>
+                                <div className="px-5 text-center">{c.name}</div>
+                            </div>
+                        );
+                    })}
+                </div>
+            )}
         </div>
     );
 }
