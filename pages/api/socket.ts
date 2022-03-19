@@ -16,10 +16,10 @@ export default async function handler(req: NextApiRequest, res: SocketResponse) 
     if (!res.socket.server.io) {
         const io = new Server(res.socket.server as any);
         res.socket.server.io = io;
+        startConsumer(io);
 
         io.on('connection', async (socket) => {
             console.log('[Server] Socket Connection Established');
-            startConsumer(socket);
 
             socket.on('newVote', ({ pollId, choiceIndex }) => {
                 publishMsg(`${pollId}-${choiceIndex}`);
