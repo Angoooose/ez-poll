@@ -4,7 +4,7 @@ import Link from 'next/link';
 import Poll from '../../Types/Poll';
 
 import { ClockIcon, ClipboardCheckIcon } from '@heroicons/react/outline';
-import { FunctionComponent } from 'react';
+import { FunctionComponent, useEffect } from 'react';
 
 import useTimeUntil from '../../hooks/useTimeUntil';
 
@@ -13,12 +13,14 @@ interface PollCardProps {
 }
 
 export default function PollCard({ poll }: PollCardProps) {
-    const [timeUntil] = useTimeUntil(poll.endsAt);
+    const [timeUntil, setTimeUntil] = useTimeUntil(poll.endsAt);
+
+    useEffect(() => setTimeUntil(poll.endsAt), [poll]);
 
     return (
-        <Link href={`/poll/${poll.id}`}>
-            <a>
-                <Card maxWidth="sm" hover={true}>
+        <Card maxWidth="sm" hover={true}>
+            <Link href={`/poll/${poll.id}`}>
+                <a>
                     <h2 className="text-lg font-medium">{poll.title}</h2>
                     <div className="text-gray-400">{poll.description}</div>
                     <BarChart values={poll.choices}/>
@@ -26,9 +28,9 @@ export default function PollCard({ poll }: PollCardProps) {
                         <PollBadge><ClockIcon className="w-5 text-cyan-500 mr-1"/>{timeUntil}</PollBadge>
                         <PollBadge><ClipboardCheckIcon className="w-5 text-green-500 mr-1"/>{poll.choices.map(c => c.votes).reduce((a, b) => a + b)} votes</PollBadge>
                     </div>
-                </Card>
-            </a>
-        </Link>
+                </a>
+            </Link>
+        </Card>
     );  
 }
 

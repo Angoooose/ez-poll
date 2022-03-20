@@ -1,7 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import pgConfig from '../../../postgres.config.json';
 import { Pool } from 'pg';
-import generateUuid from '../../../utils/generateUuid';
 import Poll from '../../../Types/Poll';
 
 interface GetResponse {
