@@ -3,7 +3,6 @@ import { ClipboardListIcon, ClockIcon } from '@heroicons/react/outline';
 import Voted from './Voted';
 
 import useTimeUntil from '../../hooks/useTimeUntil';
-import useSocket from '../../hooks/useSocket';
 import useLocalStorage from '../../hooks/useLocalStorage';
 
 import optionColors from '../../utils/optionColors';

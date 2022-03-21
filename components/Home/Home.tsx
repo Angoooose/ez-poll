@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import { useContext, useEffect, useRef, useState } from 'react';
 import SocketContext from '../../contexts/SocketContext';
-import useSocket from '../../hooks/useSocket';
 import Poll from '../../Types/Poll';
 import PollCard from './PollCard';
 
