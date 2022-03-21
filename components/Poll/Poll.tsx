@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useContext } from 'react';
 import { ClipboardListIcon, ClockIcon } from '@heroicons/react/outline';
 import Voted from './Voted';
 
@@ -10,6 +10,8 @@ import optionColors from '../../utils/optionColors';
 import VoteData from '../../Types/VoteData';
 import { default as PollData } from '../../Types/Poll';
 import PollChoice from '../../Types/PollChoice';
+import toast from 'react-hot-toast';
+import SocketContext from '../../contexts/SocketContext';
 
 interface PollProps {
     pollId: string|undefined,
@@ -26,7 +28,7 @@ export default function Poll({ pollId }: PollProps) {
         choices: [],
     });
     
-    const socket = useSocket();
+    const socket = useContext(SocketContext);
     const [isSocketListening, setIsSocketListening] = useState<boolean>(false);
 
     const choices = useRef<PollChoice[]>([]);
@@ -39,6 +41,7 @@ export default function Poll({ pollId }: PollProps) {
     };
 
     const [voteData, setVoteData] = useLocalStorage<VoteData[]>('voteData', []);
+    const toastRef = useRef<string|null>();
 
     useEffect(() => {
         if (pollId) {
@@ -58,9 +61,17 @@ export default function Poll({ pollId }: PollProps) {
                 let newChoices = [...choices.current];
                 newChoices[msg].votes++;
                 updateChoices(newChoices, true);
+
+                if (toastRef.current) {
+                    toast.success('Vote Casted', {
+                        id: toastRef.current,
+                    });
+
+                    toastRef.current = null;
+                }
             });
         }
-    }, [socket, pollId, pollData]);
+    }, [pollId, pollData]);
 
     const handleChoiceHover = (index: number) => {
         const newChoices = [...isChoiceOpaque];
@@ -78,6 +89,7 @@ export default function Poll({ pollId }: PollProps) {
         let newVoteData = [...voteData];
         newVoteData.push({ id: pollId as string, choiceIndex });
         setVoteData(newVoteData);
+        toastRef.current = toast.loading('Casting Vote');
         socket.emit('newVote', {
             pollId,
             choiceIndex,

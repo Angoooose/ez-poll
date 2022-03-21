@@ -10,7 +10,16 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         <div className="bg-neutral-800 text-white min-h-screen w-full overflow-x-hidden">
           <Header isAuthed={pageProps.isAuthed}/>
           <Component {...pageProps} />
-          <Toaster/>
+          <Toaster
+            position="bottom-center"
+            toastOptions={{
+                style: {
+                  backgroundColor: '#404040',
+                  borderRadius: '20px',
+                  color: 'white',
+                }
+            }}
+          />
         </div>
     </SocketContextProvider>
   );

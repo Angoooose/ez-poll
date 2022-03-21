@@ -11,21 +11,13 @@ interface SuccessProps {
 export default function Success({ pollData }: SuccessProps) {
     const copyPollLink = () => {
         navigator.clipboard.writeText(`${window.location.origin}/poll/${pollData.id}`);
-        toast.success('Copied Link', {
-            position: 'bottom-center',
-            style: {
-                backgroundColor: '#404040',
-                borderRadius: '20px',
-                color: 'white',
-            }
-        });
+        toast.success('Copied Link');
     };
 
     return (
         <div>
             <div className="text-center bg-green-400 p-4 rounded-md">
                 <h1 className="font-medium text-2xl">Poll Created!</h1>
-                <div></div>
             </div>
             <Finalize pollData={pollData}/>
             <SettingsCard>
