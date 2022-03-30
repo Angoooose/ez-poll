@@ -15,7 +15,9 @@ export default function Header({ isAuthed }: HeaderProps) {
 
     return (
         <header className="bg-neutral-900 w-full mb-10 p-3 text-2xl font-bold shadow-md flex justify-between items-center">
-            ez-poll
+            <Link href="/">
+                <a>ez-poll</a>
+            </Link>
             <div className="flex flex-row items-center">
                 {isAuthed ? (
                     <div className="flex flex-row items-center">

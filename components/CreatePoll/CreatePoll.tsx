@@ -7,6 +7,7 @@ import AdditionalSettings from './AdditionalSettings';
 import Finalize from './Finalize';
 import Success from './Success';
 import Poll from '../../Types/Poll';
+import toast from 'react-hot-toast';
 
 const steps: StepData[] = [
     {
@@ -62,17 +63,23 @@ export default function CreatePoll({ userId }: CreatePollProps) {
             let databasePollData: Poll = JSON.parse(JSON.stringify(pollData));
             databasePollData.endsAt = new Date().getTime() + databasePollData.endsAt * 3.6e+6;
 
-            fetch('/api/poll/create', {
-                method: 'POST',
-                body: JSON.stringify({
-                    ...databasePollData
-                }),
-            }).then(res => res.json()).then((res) => {
-                let updatedPollData: Poll = JSON.parse(JSON.stringify(pollData));
-                updatedPollData.id = res.pollId;
-                setpollData(updatedPollData);
-                setIsComplete(true);
-            });
+            toast.promise(
+                fetch('/api/poll/create', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        ...databasePollData
+                    }),
+                }).then(res => res.json()).then((res) => {
+                    let updatedPollData: Poll = JSON.parse(JSON.stringify(pollData));
+                    updatedPollData.id = res.pollId;
+                    setpollData(updatedPollData);
+                    setIsComplete(true);
+                }), {
+                    loading: 'Creating Poll',
+                    success: 'Poll Created',
+                    error: 'Failed to create poll',
+                }
+            );
         } else {
             let newCurrentStep = currentStep;
             newCurrentStep++;
