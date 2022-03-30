@@ -1,7 +1,6 @@
 import amqp from 'amqplib';
 import { Server } from 'socket.io';
-import pgConfig from '../../postgres.config.json';
-import { Pool } from 'pg';
+import database from '../database';
 import PollChoice from '../../Types/PollChoice';
 
 export async function startConsumer(io: Server): Promise<void> {
@@ -14,12 +13,11 @@ export async function startConsumer(io: Server): Promise<void> {
         const msgContent = msg.content.toString();
         const pollId: string = msgContent.split('-')[0];
         const choiceIndex: number = parseInt(msgContent.split('-')[1]);
-        const pool = new Pool(pgConfig);
-        const pollQuery = await pool.query('SELECT owner_id, choices FROM polls WHERE id = $1 LIMIT 1', [pollId]);
+        const pollQuery = await database.query('SELECT owner_id, choices FROM polls WHERE id = $1 LIMIT 1', [pollId]);
         if (pollQuery.rowCount > 0) {
             let pollChoices: PollChoice[] = pollQuery.rows[0].choices;
             pollChoices[choiceIndex].votes++;
-            await pool.query('UPDATE polls SET choices = $1 WHERE id = $2', [JSON.stringify(pollChoices), pollId]);
+            await database.query('UPDATE polls SET choices = $1 WHERE id = $2', [JSON.stringify(pollChoices), pollId]);
             io.emit(pollId, choiceIndex);
             io.emit(`userUpdate-${pollQuery.rows[0].owner_id}`, {
                 id: pollId,

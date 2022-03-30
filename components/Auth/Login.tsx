@@ -35,7 +35,7 @@ export default function Login({ setAuthType }: LoginProps) {
             <form className="flex flex-col" onSubmit={login}>
                 <Input placeholder="Email" type="email" ref={emailRef} onChange={(el) => setIsButtonDisabled(el.target.value === '' || passwordRef.current!.value === '')}/>
                 <Input placeholder="Password" type="password" ref={passwordRef} onChange={(el) => setIsButtonDisabled(el.target.value === '' || emailRef.current!.value === '')}/>
-                <Button disabled={isButtonDisabled}>Sign In</Button>
+                <Button fullWidth={true} disabled={isButtonDisabled}>Sign In</Button>
                 <div>or <span className="text-cyan-400 cursor-pointer hover:underline" onClick={() => setAuthType('new')}>create an account</span>.</div>
             </form>
         </Card>

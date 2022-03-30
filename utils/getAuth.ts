@@ -11,13 +11,13 @@ interface CustomSession extends IronSession {
 export default withIronSessionSsr(
     async function getServerSideProps({ req }) {
         const session = req.session as CustomSession;
-        const user = session.user.id;
+        const user = session.user ? session.user : null;
 
         if (!user) {
             return {
                 props: {
                     isAuthed: false,
-                    user: '',
+                    user,
                 }
             };
         }

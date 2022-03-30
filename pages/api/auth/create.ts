@@ -1,16 +1,14 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import pgConfig from '../../../postgres.config.json';
-import { Pool } from 'pg';
 import generateUuid from '../../../utils/generateUuid';
+import database from '../../../utils/database';
 
 export default async function handler({ body }: NextApiRequest, res: NextApiResponse) {
     const { email, password } = JSON.parse(body);
-    const pool = new Pool(pgConfig);
-    const existQueury = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
+    const existQueury = await database.query('SELECT * FROM users WHERE email = $1', [email]);
     if (existQueury.rowCount === 0) {
         const uuid = await generateUuid('users');
         console.log(uuid);
-        pool.query('INSERT INTO users (id, email, password) VALUES ($1, $2, $3)', [uuid, email, password]).then(() => {
+        database.query('INSERT INTO users (id, email, password) VALUES ($1, $2, $3)', [uuid, email, password]).then(() => {
             res.status(204).send({ message: 'Created account', code: 1 });
         }).catch((err) => {
             console.error(err);
