@@ -1,23 +1,18 @@
-import { IronSession } from 'iron-session';
 import { withIronSessionSsr } from 'iron-session/next';
 import sessionCookie from '../utils/sessionCookie';
-
-interface CustomSession extends IronSession {
-    user: {
-        id: string,
-    },
-}
+import CustomSession from '../Types/CustomSession';
 
 export default withIronSessionSsr(
     async function getServerSideProps({ req }) {
         const session = req.session as CustomSession;
-        const user = session.user ? session.user : null;
 
-        if (!user) {
+        if (!session.user) {
             return {
                 props: {
                     isAuthed: false,
-                    user,
+                    user: {
+                        id: '',
+                    },
                 }
             };
         }
@@ -25,7 +20,7 @@ export default withIronSessionSsr(
         return {
             props: {
                 isAuthed: true,
-                user,
+                user: session.user,
             },
         };
 }, sessionCookie);
