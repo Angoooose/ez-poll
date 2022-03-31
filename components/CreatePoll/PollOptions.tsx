@@ -55,7 +55,7 @@ export default function PollOptions({ pollData, setpollData}: CreateStepProps) {
                         </div>
                     );
                 })}
-                <Button onClick={addChoice} disabled={pollData.choices?.length === 5}>Add Choice</Button>
+                <Button fullWidth={true} onClick={addChoice} disabled={pollData.choices?.length === 5}>Add Choice</Button>
             </SettingsCard>
         </div>
     );
