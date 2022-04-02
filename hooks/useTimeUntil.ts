@@ -19,8 +19,10 @@ function getTimeUntil(date: number): string {
 
     const timeBetween = untilDate.getTime() - currentDate.getTime();
     const minutes = Math.floor(timeBetween / 60000);
-    const hours = Math.floor(minutes / 60);
+    const hours = Math.floor(Math.abs(minutes) / 60);
+    const days = Math.floor(hours / 24);
 
     if (Math.abs(minutes) < 60) return `${Math.abs(minutes)} minute${Math.abs(minutes) === 1 ? '' : 's'} ${minutes < 0 ? 'ago' : ''}`;
-    return `${Math.abs(hours)} hour${Math.abs(hours) === 1 ? '' : 's'} ${hours < 0 ? 'ago' : ''}`;
+    if (hours < 24) return `${Math.abs(hours)} hour${Math.abs(hours) === 1 ? '' : 's'} ${hours < 0 ? 'ago' : ''}`;
+    return `${days} day${days === 1 ? '' : 's'} ${minutes < 0 ? 'ago' : ''}`;
 }
