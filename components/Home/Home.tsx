@@ -19,8 +19,6 @@ export default function Home({ userId }: HomeProps) {
     const socket = useContext(SocketContext);
 
     socket.on(`userUpdate-${userId}`, (poll: Poll) => {
-        console.log('userUpdate');
-        console.log(poll);
         let newPolls = [...pollsRef.current];
         const pollIndex = newPolls.findIndex(p => p.id === poll.id);
         if (pollIndex >= 0) {
@@ -38,12 +36,18 @@ export default function Home({ userId }: HomeProps) {
         });
     }, []);
 
+    const removePoll = (index: number) => {
+        let newPolls = [...pollsRef.current];
+        newPolls.splice(index, 1);
+        updatePolls(newPolls);
+    };
+
     return (
         <div className="text-center px-10">
             <h1 className="text-3xl font-medium">Active Polls</h1>
             <div className="mt-2 flex flex-row justify-center flex-wrap">
                 {polls.length > 0 ? (
-                    polls.map(p => <PollCard poll={p}/>)
+                    polls.map((p, i) => <PollCard poll={p} removePoll={() => removePoll(i)}/>)
                 ) : (
                     <div className="text-gray-400">
                         No polls created.
