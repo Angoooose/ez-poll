@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Poll from '../../Types/Poll';
 import toast from 'react-hot-toast';
 
-import { ClockIcon, ClipboardCheckIcon, ExternalLinkIcon, ClipboardCopyIcon, TrashIcon } from '@heroicons/react/outline';
+import { ClockIcon, ClipboardCheckIcon, ExternalLinkIcon, ClipboardCopyIcon, TrashIcon, LockOpenIcon, LockClosedIcon } from '@heroicons/react/outline';
 import { FunctionComponent, useEffect, useState } from 'react';
 
 import useTimeUntil from '../../hooks/useTimeUntil';
@@ -58,7 +58,12 @@ export default function PollCard({ poll, removePoll }: PollCardProps) {
             <h2 className="text-lg font-medium">{poll.title}</h2>
             <div className="text-gray-400">{poll.description}</div>
             <BarChart values={poll.choices}/>
-            <div className="flex flex-row justify-center items-center mb-2">
+            <div className="flex flex-row flex-wrap justify-center items-center mb-2">
+                {poll.endsAt <= new Date().getTime() ? (
+                    <PollBadge><LockClosedIcon className="w-5 text-teal-600 mr-1"/>Closed</PollBadge>
+                ) : (
+                    <PollBadge><LockOpenIcon className="w-5 text-teal-400 mr-1"/>Open</PollBadge>
+                )}
                 <PollBadge><ClockIcon className="w-5 text-cyan-500 mr-1"/>{timeUntil}</PollBadge>
                 <PollBadge><ClipboardCheckIcon className="w-5 text-green-500 mr-1"/>{poll.choices.map(c => c.votes).reduce((a, b) => a + b)} votes</PollBadge>
             </div>
@@ -92,5 +97,5 @@ export default function PollCard({ poll, removePoll }: PollCardProps) {
 }
 
 const PollBadge: FunctionComponent = ({ children }) => {
-    return <div className="bg-neutral-900 flex flex-row justify-center items-center whitespace-nowrap text-gray-400 py-0.5 px-1.5 shadow-md rounded-md mx-1">{children}</div>;
+    return <div className="bg-neutral-900 flex flex-row justify-center items-center whitespace-nowrap text-gray-400 py-0.5 px-1.5 shadow-md rounded-md mt-2 mx-1">{children}</div>;
 }
