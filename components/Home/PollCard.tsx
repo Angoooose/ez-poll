@@ -18,6 +18,7 @@ interface PollCardProps {
 export default function PollCard({ poll, removePoll }: PollCardProps) {
     const [timeUntil, setTimeUntil] = useTimeUntil(poll.endsAt);
     const [isDeleteConfirmation, setIsDeleteConfirmation] = useState<boolean>(false);
+    const [isDeleteDisabled, setIsDeleteDisabled] = useState<boolean>(false);
 
     useEffect(() => setTimeUntil(poll.endsAt), [poll]);
 
@@ -27,7 +28,8 @@ export default function PollCard({ poll, removePoll }: PollCardProps) {
     };
 
     const deletePoll = () => {
-        if (isDeleteConfirmation) {
+        if (isDeleteConfirmation && !isDeleteDisabled) {
+            setIsDeleteDisabled(true);
             toast.promise(
                 fetch('/api/poll/delete', {
                     method: 'DELETE',
@@ -72,7 +74,7 @@ export default function PollCard({ poll, removePoll }: PollCardProps) {
                     </Button>
                 </div>
                 <div className="mx-1">
-                    <Button title="Delete" color="danger" onClick={deletePoll}>
+                    <Button title="Delete" color="danger" onClick={deletePoll} disabled={isDeleteDisabled}>
                         {isDeleteConfirmation ? (
                             <div>Delete forever?</div>
                         ) : (   
