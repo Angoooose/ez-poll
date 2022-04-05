@@ -20,7 +20,11 @@ export default function PollCard({ poll, removePoll }: PollCardProps) {
     const [isDeleteConfirmation, setIsDeleteConfirmation] = useState<boolean>(false);
     const [isDeleteDisabled, setIsDeleteDisabled] = useState<boolean>(false);
 
-    useEffect(() => setTimeUntil(poll.endsAt), [poll]);
+    useEffect(() => {
+        setTimeUntil(poll.endsAt);
+        setIsDeleteConfirmation(false);
+        setIsDeleteDisabled(false);
+    }, [poll]);
 
     const copyPollLink = () => {
         navigator.clipboard.writeText(`${window.location.origin}/poll/${poll.id}`);
