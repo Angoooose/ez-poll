@@ -43,11 +43,11 @@ export default function Home({ userId }: HomeProps) {
     };
 
     return (
-        <div className="text-center px-10">
-            <h1 className="text-3xl font-medium">Active Polls</h1>
+        <div className="text-center px-10 pb-10">
+            <h1 className="text-3xl font-medium">Your Polls</h1>
             <div className="mt-2 flex flex-row justify-center flex-wrap">
                 {polls.length > 0 ? (
-                    polls.map((p, i) => <PollCard poll={p} removePoll={() => removePoll(i)}/>)
+                    polls.sort(p => p.endsAt > new Date().getTime() ? -1 : 1).map((p, i) => <PollCard poll={p} removePoll={() => removePoll(i)}/>)
                 ) : (
                     <div className="text-gray-400">
                         No polls created.

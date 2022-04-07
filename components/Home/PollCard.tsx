@@ -1,6 +1,6 @@
 import BarChart from '../common/BarChart/BarChart';
 import Card from '../common/Card';
-import Button from '../common/Button';
+import PollButton from './PollButton';
 import Link from 'next/link';
 import Poll from '../../Types/Poll';
 import toast from 'react-hot-toast';
@@ -67,29 +67,29 @@ export default function PollCard({ poll, removePoll }: PollCardProps) {
                 <PollBadge><ClockIcon className="w-5 text-cyan-500 mr-1"/>{timeUntil}</PollBadge>
                 <PollBadge><ClipboardCheckIcon className="w-5 text-green-500 mr-1"/>{poll.choices.map(c => c.votes).reduce((a, b) => a + b)} votes</PollBadge>
             </div>
-            <div className="flex items-center justify-center">
+            <div className="flex items-center justify-center py-1 px-2 bg-neutral-900 rounded-md bg-opacity-80">
                 <div className="mx-1">
                     <Link href={`/poll/${poll.id}`}>
                         <a target="_blank">
-                            <Button title="Open">
+                            <PollButton>
                                 <ExternalLinkIcon className="w-5 py-0.5"/>
-                            </Button>
+                            </PollButton>
                         </a>
                     </Link>
                 </div>
                 <div className="mx-1">
-                    <Button title="Copy Link" onClick={copyPollLink}>
+                    <PollButton onClick={copyPollLink}>
                         <ClipboardCopyIcon className="w-5 py-0.5"/>
-                    </Button>
+                    </PollButton>
                 </div>
                 <div className="mx-1">
-                    <Button title="Delete" color="danger" onClick={deletePoll} disabled={isDeleteDisabled}>
+                    <PollButton color="danger" onClick={deletePoll} disabled={isDeleteDisabled}>
                         {isDeleteConfirmation ? (
                             <div>Delete forever?</div>
-                        ) : (   
+                        ) : (
                             <TrashIcon className="w-5 py-0.5"/>
                         )}
-                    </Button>
+                    </PollButton>
                 </div>
             </div>
     </Card>
