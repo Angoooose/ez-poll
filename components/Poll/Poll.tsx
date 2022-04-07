@@ -15,6 +15,8 @@ import Voted from './Voted';
 import Closed from './Closed';
 import NotFound from './NotFound';
 
+import Head from 'next/head';
+
 interface PollProps {
     pollId: string|undefined,
 }
@@ -112,6 +114,7 @@ export default function Poll({ pollId }: PollProps) {
 
     return (
         <div className="px-4 max-w-3xl m-auto">
+            {pollData.title && <Head><title>ez-poll: {pollData.title}</title></Head>}
             <div className="bg-neutral-700 m-auto p-4 rounded-md flex items-center justify-between">
                 <div>
                     <h1 className="text-2xl font-medium">{pollData.title}</h1>
