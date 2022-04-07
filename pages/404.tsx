@@ -2,15 +2,16 @@ import Link from 'next/link';
 
 export default function Custom404() {
     return (
-        <div className="text-center">
-            <div className="text-8xl font-medium -mt-2">404</div>
-            <div className="text-gray-400 mt-2">
+        <div className="flex flex-col items-center text-center m-auto max-w-xs">
+            <div className="text-5xl font-bold">404</div>
+            <hr className="w-full my-2 border-neutral-500 opacity-75"/>
+            <div className="text-gray-400 mt-1">
                 We couldn't find the page you were looking for.
-                <div className="text-cyan-400 cursor-pointer hover:underline">
+                <span className="text-cyan-400 cursor-pointer hover:underline ml-1">
                     <Link href="/">
                         <a>Return home?</a>
                     </Link>
-                </div>
+                </span>
             </div>
         </div>
     );
