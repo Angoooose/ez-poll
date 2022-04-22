@@ -4,7 +4,7 @@ import database from '../database';
 import PollChoice from '../../Types/PollChoice';
 
 export async function startConsumer(io: Server): Promise<void> {
-    const client = await amqp.connect('amqp://localhost:5672');
+    const client = await amqp.connect(`amqp://${process.env.NODE_ENV === 'production' ? 'rabbitmq' : 'localhost'}:5672`);
     const channel = await client.createChannel();
     await channel.assertQueue('votes');
 

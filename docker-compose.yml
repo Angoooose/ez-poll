@@ -1,0 +1,22 @@
+version: '3'
+services:
+  web:
+    build: .
+    ports:
+      - '3000:3000'
+    depends_on:
+      - 'rabbitmq'
+      - 'postgres'
+  rabbitmq:
+    image: rabbitmq:alpine
+    ports:
+      - '5672:5672'
+      - '15673:15672'
+  postgres:
+    image: postgres:alpine
+    ports:
+      - '5432:5432'
+    env_file:
+      - .env.local
+    volumes:
+      - ./pg_init.sql:/docker-entrypoint-initdb.d/pg_init.sql
