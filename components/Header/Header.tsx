@@ -27,8 +27,8 @@ export default function Header({ isAuthed }: HeaderProps) {
                         <Button color="danger" sideMargin={true} onClick={logout}>Logout</Button>
                     </div>
                 ) : null}
-                <a className="h-8" href="https://github.com/Angoooose" target="_blank">
-                    <Image src={github} width={32} height={32}/>
+                <a className="h-8" href="https://github.com/Angoooose" target="_blank" rel="noreferrer">
+                    <Image src={github} width={32} height={32} alt="Octocat"/>
                 </a>
             </div>
         </header>

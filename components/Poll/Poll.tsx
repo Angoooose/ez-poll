@@ -148,7 +148,7 @@ export default function Poll({ pollId }: PollProps) {
                 <div className="flex items-center justify-center">
                     {pollData.choices.map((c, i) => {
                         return (
-                            <div className={`bg-gradient-to-t py-10 my-4 mx-2 first:ml-0 last:mr-0 rounded-md shadow-sm flex flex-col justify-center items-center font-medium select-none cursor-pointer w-3/6 hover:w-5/6 transition-all ${isChoiceOpaque[i] ? 'opacity-50' : ''} ${optionColors[i]}`} onMouseOver={() => handleChoiceHover(i)} onMouseLeave={() => setIsChoiceOpaque(Array(pollData.choices.length).fill(false))} onClick={() => vote(i)}>
+                            <div className={`bg-gradient-to-t py-10 my-4 mx-2 first:ml-0 last:mr-0 rounded-md shadow-sm flex flex-col justify-center items-center font-medium select-none cursor-pointer w-3/6 hover:w-5/6 transition-all ${isChoiceOpaque[i] ? 'opacity-50' : ''} ${optionColors[i]}`} onMouseOver={() => handleChoiceHover(i)} onMouseLeave={() => setIsChoiceOpaque(Array(pollData.choices.length).fill(false))} onClick={() => vote(i)} key={i}>
                                 <div className="px-5 text-center">{c.name}</div>
                             </div>
                         );

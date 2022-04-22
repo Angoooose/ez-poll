@@ -49,7 +49,7 @@ export default function PollOptions({ pollData, setpollData}: CreateStepProps) {
                     const input = <Input placeholder={`Poll Choice #${i + 1}`} value={c.name} onChange={(e) => updateChoice(e.target.value, i)}/>;
                     if (i < 2) return input;
                     return (
-                        <div className="flex flex-row w-full items-center">
+                        <div className="flex flex-row w-full items-center" key={i}>
                             {input}
                             <div className="ml-2"><Button color="danger" onClick={() => removeChoice(i)}><TrashIcon className="w-5 py-0.5"/></Button></div>
                         </div>

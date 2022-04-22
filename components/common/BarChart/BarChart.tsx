@@ -8,7 +8,7 @@ interface BarChartProps {
 export default function BarChart({ values }: BarChartProps) {
     return (
         <div className="flex flex-row justify-center h-36 mt-8 mb-2 select-none">
-            {values.map((v, i) => <Bar values={values} index={i}/>)}
+            {values.map((v, i) => <Bar values={values} index={i} key={i}/>)}
         </div>
     );
 }

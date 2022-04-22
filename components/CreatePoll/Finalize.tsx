@@ -25,7 +25,7 @@ export default function Finalize({ pollData }: FinalizeProps) {
                 </div>
                 <div className="flex flex-grow flex-wrap max-w-md">
                     {pollData.choices?.map((c, i) => {
-                        return <div className={`bg-gradient-to-l p-2 m-2 rounded-md flex flex-col justify-center text-center flex-grow basis-0 ${optionColors[i]}`}>{c.name}</div>;
+                        return <div className={`bg-gradient-to-l p-2 m-2 rounded-md flex flex-col justify-center text-center flex-grow basis-0 ${optionColors[i]}`} key={i}>{c.name}</div>;
                     })}
                 </div>
             </div>

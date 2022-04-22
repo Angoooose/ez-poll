@@ -15,7 +15,7 @@ interface StepperProps {
 export default function Stepper({ steps, currentStep, setCurrentStep, isNextDisabled }: StepperProps) {
     return (
         <div className="flex flex-row justify-between items-center max-w-2xl m-auto pb-2">
-            {steps.map((step, i) => <Step isCurrent={i === currentStep} isDisabled={isNextDisabled && i > currentStep} index={i} setCurrentStep={setCurrentStep} {...step}></Step> )}
+            {steps.map((step, i) => <Step isCurrent={i === currentStep} isDisabled={isNextDisabled && i > currentStep} index={i} setCurrentStep={setCurrentStep} key={i} {...step}></Step> )}
         </div>
     );
 }

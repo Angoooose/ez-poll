@@ -34,7 +34,7 @@ export default function Home({ userId }: HomeProps) {
         fetch(`/api/poll/user?userId=${userId}`).then(res => res.json()).then((res: Poll[]) => {
             updatePolls(res);
         });
-    }, []);
+    }, [userId]);
 
     const removePoll = (index: number) => {
         let newPolls = [...pollsRef.current];
@@ -47,7 +47,7 @@ export default function Home({ userId }: HomeProps) {
             <h1 className="text-3xl font-medium">Your Polls</h1>
             <div className="mt-2 flex flex-row justify-center flex-wrap">
                 {polls.length > 0 ? (
-                    polls.sort(p => p.endsAt > new Date().getTime() ? -1 : 1).map((p, i) => <PollCard poll={p} removePoll={() => removePoll(i)}/>)
+                    polls.sort(p => p.endsAt > new Date().getTime() ? -1 : 1).map((p, i) => <PollCard poll={p} removePoll={() => removePoll(i)} key={p.id}/>)
                 ) : (
                     <div className="text-gray-400">
                         No polls created.

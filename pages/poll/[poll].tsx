@@ -1,7 +1,7 @@
 import Poll from '../../components/Poll/Poll';
 import { useRouter } from 'next/router'
 
-export default function poll() {
+export default function PollPage() {
     const router = useRouter();
     const { poll } = router.query;
 
