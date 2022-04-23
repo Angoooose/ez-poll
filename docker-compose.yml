@@ -9,9 +9,6 @@ services:
       - 'postgres'
   rabbitmq:
     image: rabbitmq:alpine
-    ports:
-      - '5672:5672'
-      - '15673:15672'
   postgres:
     image: postgres:alpine
     env_file:
