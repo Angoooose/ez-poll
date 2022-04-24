@@ -11,6 +11,10 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         <Head>
           <title>ez-poll</title>
           <link rel="icon" href="/favicon.ico" />
+          <meta property="og:title" content="ez-poll" />
+          <meta property="og:type" content="website" />
+          <meta property="og:url" content="https://polls.angoose.dev/" />
+          <meta property="og:description" content="A polling web application built with NextJS, TailwindCSS, PostgreSQL, RabbitMQ, and Docker." />
         </Head>
         <div className="bg-neutral-800 text-white min-h-screen w-full overflow-x-hidden">
           <Header isAuthed={pageProps.isAuthed}/>
